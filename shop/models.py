@@ -35,7 +35,7 @@ class Favorit(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     total = models.PositiveIntegerField()
-    isComplit = models.BooleanField(default=False)
+    isCompile = models.BooleanField(default=False)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
