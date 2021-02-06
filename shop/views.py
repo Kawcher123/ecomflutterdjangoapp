@@ -37,7 +37,7 @@ class ProductView(views.APIView):
         return Response(data)
 
 
-class FavoritView(APIView):
+class FavoritView(views.APIView):
     permission_classes = [IsAuthenticated, ]
     authentication_classes = [TokenAuthentication, ]
 
