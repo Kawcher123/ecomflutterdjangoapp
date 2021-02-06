@@ -91,7 +91,7 @@ class CartView(views.APIView):
     def get(self, request):
         user = request.user
         try:
-            cart_obj = Cart.objects.filter(user=user).filter(isComplit=False)
+            cart_obj = Cart.objects.filter(user=user).filter(isCompile=False)
             data = []
             cart_serializer = CartSerializers(cart_obj, many=True)
             for cart in cart_serializer.data:
@@ -129,7 +129,7 @@ class AddToCart(views.APIView):
         product_obj = Product.objects.get(id=product_id)
         # print(product_obj, "product_obj")
         cart_cart = Cart.objects.filter(
-            user=request.user).filter(isComplit=False).first()
+            user=request.user).filter(isCompile=False).first()
         cart_product_obj = CartProduct.objects.filter(
             product__id=product_id).first()
 
@@ -141,7 +141,7 @@ class AddToCart(views.APIView):
                     product=product_obj)
                 if this_product_in_cart.exists():
                     cartprod_uct = CartProduct.objects.filter(
-                        product=product_obj).filter(cart__isComplit=False).first()
+                        product=product_obj).filter(cart__isCompile=False).first()
                     cartprod_uct.quantity += 1
                     cartprod_uct.subtotal += product_obj.selling_price
                     cartprod_uct.save()
@@ -160,9 +160,9 @@ class AddToCart(views.APIView):
                     cart_cart.save()
             else:
                 Cart.objects.create(user=request.user,
-                                    total=0, isComplit=False)
+                                    total=0, isCompile=False)
                 new_cart = Cart.objects.filter(
-                    user=request.user).filter(isComplit=False).first()
+                    user=request.user).filter(isCompile=False).first()
                 cart_product_new = CartProduct.objects.create(
                     cart=new_cart,
                     price=product_obj.selling_price,
@@ -189,7 +189,7 @@ class DelateCarProduct(views.APIView):
         try:
             cart_product_obj = CartProduct.objects.get(id=cart_product_id)
             cart_cart = Cart.objects.filter(
-                user=request.user).filter(isComplit=False).first()
+                user=request.user).filter(isCompile=False).first()
             cart_cart.total -= cart_product_obj.subtotal
             cart_product_obj.delete()
             cart_cart.save()
@@ -226,7 +226,7 @@ class OrderCreate(views.APIView):
             email = data['email']
             phone = data['phone']
             cart_obj = Cart.objects.get(id=cart_id)
-            cart_obj.isComplit = True
+            cart_obj.isCompile = True
             cart_obj.save()
             Order.objects.create(
                 cart=cart_obj,
