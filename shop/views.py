@@ -37,22 +37,31 @@ class ProductView(views.APIView):
         return Response(data)
 
 
-class FavoritView(views.APIView):
-    authentication_classes = [TokenAuthentication, ]
+class FavoritView(APIView):
     permission_classes = [IsAuthenticated, ]
+    authentication_classes = [TokenAuthentication, ]
 
     def post(self, request):
         data = request.data["id"]
-        user = request.user
-        single_product = Favorit.objects.filter(user=user).filter(id=data)
-        if single_product:
-            fab = single_product[0].isFavorit
-            prod = Favorit.objects.get(id=single_product[0].id)
-            prod.isFavorit = not fab
-            prod.save()
-        else:
-            Favorit.objects.create(product_id=data, user=user, isFavorit=True)
-        return Response({"message": "response is Get Successfully"})
+        # print(data)
+        try:
+            product_obj = Product.objects.get(id=data)
+            # print(data)
+            user = request.user
+            single_favorit_product = Favorit.objects.filter(
+                user=user).filter(product=product_obj).first()
+            if single_favorit_product:
+                print("single_favorit_product")
+                ccc = single_favorit_product.isFavorit
+                single_favorit_product.isFavorit = not ccc
+                single_favorit_product.save()
+            else:
+                Favorit.objects.create(
+                    product=product_obj, user=user, isFavorit=True)
+            response_msg = {'error': False}
+        except:
+            response_msg = {'error': True}
+        return Response(response_msg)
 
 
 class UserView(views.APIView):
