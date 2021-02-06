@@ -35,11 +35,11 @@ class Favorit(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     total = models.PositiveIntegerField()
-    isCompile = models.BooleanField(default=False)
+    isComplit = models.BooleanField(default=False)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"User={self.user.username}|ISComplit={self.isCompile}"
+        return f"User={self.user.username}|ISComplit={self.isComplit}"
 
 
 class CartProduct(models.Model):
@@ -53,18 +53,8 @@ class CartProduct(models.Model):
         return f"Cart=={self.cart.id}<==>CartProduct:{self.id}==Qualtity=={self.quantity}"
 
 
-ORDER_STATUS = (
-    ("Order Received", "Order Received"),
-    ("Order Processing", "Order Processing"),
-    ("On the way", "On the way"),
-    ("Order Completed", "Order Completed"),
-    ("Order Canceled", "Order Canceled"),
-)
-
-
 class Order(models.Model):
     cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
-    email = models.CharField(max_length=200)
+    email = models.CharField(max_length=150)
     phone = models.CharField(max_length=13)
-    address = models.CharField(max_length=250)
-    order_status = models.CharField(max_length=20, choices=ORDER_STATUS)
+    address = models.CharField(max_length=200)
